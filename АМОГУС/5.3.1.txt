@@ -1,0 +1,59 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+void calculateOperations(int n) {
+    std::vector<int> dist(n + 1, -1);
+    std::vector<std::vector<int>> parent(n + 1);
+    std::queue<int> q;
+
+    dist[1] = 0;
+    q.push(1);
+
+    while (!q.empty()) {
+        int current = q.front();
+        q.pop();
+
+        if (current == n) {
+            std::cout << dist[n] << std::endl;
+            std::vector<int> result;
+            int temp = n;
+            while (temp != 1) {
+                result.push_back(temp);
+                temp = parent[temp][0];
+            }
+            result.push_back(1);
+            for (int i = result.size() - 1; i >= 0; --i) {
+                std::cout << result[i];
+                if (i != 0) {
+                    std::cout << " ";
+                }
+            }
+            std::cout << std::endl;
+            return;
+        }
+
+        if (3 * current <= n && dist[3 * current] == -1) {
+            dist[3 * current] = dist[current] + 1;
+            parent[3 * current].push_back(current);
+            q.push(3 * current);
+        }
+        if (2 * current <= n && dist[2 * current] == -1) {
+            dist[2 * current] = dist[current] + 1;
+            parent[2 * current].push_back(current);
+            q.push(2 * current);
+        }
+        if (current + 1 <= n && dist[current + 1] == -1) {
+            dist[current + 1] = dist[current] + 1;
+            parent[current + 1].push_back(current);
+            q.push(current + 1);
+        }
+    }
+}
+
+int main() {
+    int n;
+    std::cin >> n;
+    calculateOperations(n);
+    return 0;
+}

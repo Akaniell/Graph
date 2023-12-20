@@ -1,0 +1,29 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+int main() {
+    int n, L;
+    std::cin >> n >> L;
+
+    std::vector<int> points(n);
+    for (int i = 0; i < n; ++i) {
+        std::cin >> points[i];
+    }
+
+    std::sort(points.begin(), points.end());
+
+    int segments = 1;
+    int currentPoint = points[0];
+
+    for (int i = 1; i < n; ++i) {
+        if (points[i] - currentPoint > L) {
+            currentPoint = points[i];
+            segments++;
+        }
+    }
+
+    std::cout << segments << std::endl;
+
+    return 0;
+}

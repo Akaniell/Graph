@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+void printCombinations(std::vector<std::vector<int>>& combinations) {
+    std::cout << combinations.size() << std::endl;
+    for (int i = combinations.size() - 1; i >= 0; --i) {
+        std::cout << combinations[i].size() << " ";
+        std::sort(combinations[i].begin(), combinations[i].end());
+        for (int j = 0; j < combinations[i].size(); ++j) {
+            std::cout << combinations[i][j];
+            if (j < combinations[i].size() - 1) {
+                std::cout << " ";
+            }
+        }
+        std::cout << std::endl;
+    }
+}
+
+void findCombinations(int money, std::vector<int>& coins, std::vector<int>& current, int index, std::vector<std::vector<int>>& combinations) {
+    if (money < 0) {
+        return;
+    }
+    if (money == 0) {
+        combinations.push_back(current);
+        return;
+    }
+
+    for (int i = index; i < coins.size(); i++) {
+        current.push_back(coins[i]);
+        findCombinations(money - coins[i], coins, current, i, combinations);
+        current.pop_back();
+    }
+}
+
+int main() {
+    int money;
+    std::cin >> money;
+
+    std::vector<int> coins = {1, 5, 10};
+    std::vector<std::vector<int>> combinations;
+    std::vector<int> current;
+    
+    findCombinations(money, coins, current, 0, combinations);
+    printCombinations(combinations);
+
+    return 0;
+}

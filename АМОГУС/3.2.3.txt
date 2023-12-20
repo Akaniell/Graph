@@ -1,0 +1,26 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n, a, b;
+    cin >> n;
+
+    if (n == 1)
+    {
+        cout << "1 1";
+    }
+    else
+    {
+        a = 2;
+        b = 1;
+        while (a <= n && b <= n)
+        {
+            int temp = a;
+            a = a + b;
+            b = temp;
+        }
+        cout << a % b << " " << b;
+    }
+    return 0;
+}

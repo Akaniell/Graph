@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+
+long long mergeAndCountSplitTranspositions(std::vector<int>& arr, int low, int mid, int high) {
+    int n1 = mid - low + 1;
+    int n2 = high - mid;
+
+    std::vector<int> left(n1);
+    std::vector<int> right(n2);
+
+    for (int i = 0; i < n1; i++) {
+        left[i] = arr[low + i];
+    }
+    for (int j = 0; j < n2; j++) {
+        right[j] = arr[mid + 1 + j];
+    }
+
+    int i = 0, j = 0, k = low;
+    long long splitTranspositions = 0;
+
+    while (i < n1 && j < n2) {
+        if (left[i] <= right[j]) {
+            arr[k++] = left[i++];
+        } else {
+            arr[k++] = right[j++];
+            splitTranspositions += n1 - i;
+        }
+    }
+
+    while (i < n1) {
+        arr[k++] = left[i++];
+    }
+    while (j < n2) {
+        arr[k++] = right[j++];
+    }
+
+    return splitTranspositions;
+}
+
+long long mergeSortAndCountTranspositions(std::vector<int>& arr, int low, int high) {
+    long long transpositions = 0;
+    if (low < high) {
+        int mid = (low + high) / 2;
+        transpositions += mergeSortAndCountTranspositions(arr, low, mid);
+        transpositions += mergeSortAndCountTranspositions(arr, mid + 1, high);
+        transpositions += mergeAndCountSplitTranspositions(arr, low, mid, high);
+    }
+    return transpositions;
+}
+
+long long countTranspositions(std::vector<int>& permutation) {
+    return mergeSortAndCountTranspositions(permutation, 0, permutation.size() - 1);
+}
+
+int main() {
+    int n;
+    std::cin >> n;
+    std::vector<int> permutation(n);
+
+    for (int i = 0; i < n; ++i) {
+        std::cin >> permutation[i];
+    }
+
+    std::cout << countTranspositions(permutation) << std::endl;
+
+    return 0;
+}
